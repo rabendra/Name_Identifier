@@ -1,0 +1,81 @@
+
+<h4>Please check radio button <%= @user.character_no %>-times </h4>
+<table class="table table-bordered">
+  <%= form_for(@user) do |f| %>
+    <div class="row">
+      <td>
+        <div class="col-md-3">
+          <%= f.radio_button :checked_values, 'a e i m q u y' , id:'radio1' %> 
+          <div id='output1'></div> 
+        </div>
+      </td>
+      <td>
+        <div class="col-md-3">
+          <%= f.radio_button :checked_values, 'b f j n r v z' , id:'radio2' %>
+          <div id='output2'></div>
+        </div>
+      </td>
+      <td>
+        <div class="col-md-3">
+          <%= f.radio_button :checked_values, 'c g k o s w  ' , id:'radio3' %>
+          <div id='output3'></div> 
+        </div>
+      </td>
+      <td>
+        <div class="col-md-3">
+          <%= f.radio_button :checked_values, 'd h l p t x  ' , id:'radio4' %>
+          <div id='output4'></div>
+        </div>
+      </td>
+    </div>
+  <% end %>
+</table>
+
+<div id="checked-row">
+  <%= render "checked" %>
+</div>
+
+<div id="name"></div>
+
+<script type="text/javascript">
+  var row = [];
+  var alphabet1 = $('#radio1').val().split(' ');
+  row.push(alphabet1);
+  $.each(alphabet1, function(letter) {
+    $('#output1').append($('<option>'+alphabet1[letter]+'</option>')); 
+  });
+
+  var alphabet2 = $('#radio2').val().split(' ');
+  row.push(alphabet2);
+  $.each(alphabet2, function(letter) {
+    $('#output2').append($('<option>'+alphabet2[letter]+'</option>'));
+  });
+
+  var alphabet3 = $('#radio3').val().split(' ');
+  row.push(alphabet3);
+  $.each(alphabet3, function(letter) {
+    $('#output3').append($('<option>'+alphabet3[letter]+'</option>'));  
+  });
+
+  var alphabet4 = $('#radio4').val().split(' ');
+  row.push(alphabet4);
+  $.each(alphabet4, function(letter) {
+    $('#output4').append($('<option>'+alphabet4[letter]+'</option>'));  
+  });
+
+  var column = [];
+  var i=0;
+  $('body').on('change', '#radio1,#radio2,#radio3,#radio4', function () {
+    column.push($(this).val())
+    i++;
+    $(this).prop( "checked", false );
+    if(i == <%=@user.character_no%>){
+      $.ajax({
+        type: "POST",
+        url: '/users/checked_values',
+        data: {column: column,id: <%=params[:id]%>}
+      })
+      column = [];
+    }
+  });
+</script>

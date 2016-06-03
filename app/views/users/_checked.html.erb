@@ -1,0 +1,52 @@
+<h4>Please check radio button same as above <%= @user.character_no %>-times </h4>
+<table class="table table-bordered" id= "second_table">
+  <% if !@user.checked_values.blank? %>
+    <tr>
+      <% (0..(@user.checked_values.min.gsub(" ","").length)-1).each_with_index do |max_count,index| %>
+        <th class = "radio_button" id = <%=index+1 %> ><%= radio_button_tag "checked_values" ,""%></th>
+      <% end %>
+    </tr>
+
+    <% @user.checked_values.each do |values| %>
+      <tr>
+        <%if values.split(" ").length == 6%>
+          <% values.split(" ").push("-").each do |val| %>
+            <td class=""><%= val %> </td>
+          <% end %>
+        <% else %>
+          <% values.split(" ").each do |val| %>
+           <td class=""><%= val %> </td>
+          <% end %>
+        <% end %>
+          
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  var col = [];
+  var i=0;
+  var column_id;
+  var wto;
+  $(document).ready(function(){ 
+    $('.radio_button').change(function () {
+       clearTimeout(wto);
+       wto = setTimeout(function() {
+        $(this).addClass('check')
+      }, 2000);
+      $("input:radio").attr("checked", false);
+      column_id = parseInt($(this).attr('id'));
+      col = $('#second_table tbody tr td:nth-child(' + column_id + ')').text().replace(/\s/g, "").split("");
+
+      $('#name').append(col[i]);
+      i++;
+    });
+  });
+</script>
+<style type="text/css">
+  .radio_button:active
+{
+    background:red;
+}
+</style>
